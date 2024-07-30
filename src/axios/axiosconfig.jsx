@@ -1,7 +1,7 @@
-import axios from "axios"
+import axios from 'axios';
 
-const sample = axios.create({
+const instance = axios.create({
+  baseURL: 'http://localhost:5026/api', // Replace with your backend server URL and port
+});
 
-})
-
-export {sample}
+export default instance;
