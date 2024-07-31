@@ -2,3 +2,49 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Custom CSS for the hamburger menu */
+.menu_icon_box {
+  z-index: 3; /* Ensure the hamburger icon is above the menu */
+  width: fit-content;
+  height: auto;
+  background-color: #fff;
+  margin: 1rem; /* Use rem for margin */
+  position: relative;
+  border-radius: 0.25rem; /* Use rem for border-radius */
+  cursor: pointer;
+}
+.line1, .line2, .line3 {
+  width: 2rem; /* Use rem for width */
+  height: 0.2rem; /* Use rem for height */
+  margin: 0.4rem 0; /* Use rem for margin */
+  background-color: #000;
+  border-radius: 50px;
+  transition: 0.2s;
+}
+.active .line1 {
+  transform: translate(0, 0.5rem) rotate(45deg); /* Use rem for translate */
+}
+.active .line2 {
+  opacity: 0;
+}
+.active .line3 {
+  transform: translate(0, -0.5rem) rotate(-45deg); /* Use rem for translate */
+}
+
+/* Custom CSS for the menu wrapper */
+.menu_wrapper {
+  position: fixed; /* Use fixed positioning to cover the icon */
+  top: 0; /* Start from the top of the viewport */
+  left: 0; /* Align to the left side */
+  width: 35vw; /* Cover 35% of the viewport width */
+  height: 100vh; /* Full height of the viewport */
+  background-color: white; /* Change background color to yellow */
+  z-index: 2; /* Ensure it is below the hamburger icon */
+  padding: 1.25rem; /* Use rem for padding */
+  box-shadow: 0.125rem 0 0.3125rem rgba(0, 0, 0, 0.1); /* Use rem for shadow */
+}
+
+/* Ensure the nav links are not hidden behind the icon */
+.menu_wrapper ul {
+  margin-top: 3rem; /* Add margin to push the links below the icon */
+}

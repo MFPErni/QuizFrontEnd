@@ -1,73 +1,86 @@
-// src/components/NavigationBar.jsx
-
-import React from 'react';
+import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
 const NavigationBar = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
+
   return (
-    <nav className="bg-blue-600 p-4">
-      <ul className="flex space-x-4">
-        <li>
-          <NavLink
-            to="/home"
-            className={({ isActive }) =>
-              isActive ? 'text-white font-bold' : 'text-white'
-            }
-          >
-            Home
-          </NavLink>
-        </li>
-        <li>
-          <NavLink
-            to="/profile"
-            className={({ isActive }) =>
-              isActive ? 'text-white font-bold' : 'text-white'
-            }
-          >
-            Profile
-          </NavLink>
-        </li>
-        <li>
-          <NavLink
-            to="/categories"
-            className={({ isActive }) =>
-              isActive ? 'text-white font-bold' : 'text-white'
-            }
-          >
-            Categories
-          </NavLink>
-        </li>
-        <li>
-          <NavLink
-            to="/how-to-play"
-            className={({ isActive }) =>
-              isActive ? 'text-white font-bold' : 'text-white'
-            }
-          >
-            How To Play?
-          </NavLink>
-        </li>
-        <li>
-          <NavLink
-            to="/about"
-            className={({ isActive }) =>
-              isActive ? 'text-white font-bold' : 'text-white'
-            }
-          >
-            About
-          </NavLink>
-        </li>
-        <li>
-          <NavLink
-            to="/contact"
-            className={({ isActive }) =>
-              isActive ? 'text-white font-bold' : 'text-white'
-            }
-          >
-            Contact
-          </NavLink>
-        </li>
-      </ul>
+    <nav className="relative">
+      <div className="flex justify-between items-center">
+        <div className={`menu_icon_box ${isOpen ? 'active' : ''}`} onClick={toggleMenu}>
+          <div className="line1"></div>
+          <div className="line2"></div>
+          <div className="line3"></div>
+        </div>
+      </div>
+      <div className={`menu_wrapper ${isOpen ? 'block' : 'hidden'}`}>
+        <ul className="flex flex-col space-y-4">
+          <li>
+            <NavLink
+              to="/home"
+              className={({ isActive }) =>
+                isActive ? 'text-black font-bold' : 'text-black'
+              }
+            >
+              Home
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/profile"
+              className={({ isActive }) =>
+                isActive ? 'text-black font-bold' : 'text-black'
+              }
+            >
+              Profile
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/categories"
+              className={({ isActive }) =>
+                isActive ? 'text-black font-bold' : 'text-black'
+              }
+            >
+              Categories
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/how-to-play"
+              className={({ isActive }) =>
+                isActive ? 'text-black font-bold' : 'text-black'
+              }
+            >
+              How To Play?
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/about"
+              className={({ isActive }) =>
+                isActive ? 'text-black font-bold' : 'text-black'
+              }
+            >
+              About
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/contact"
+              className={({ isActive }) =>
+                isActive ? 'text-black font-bold' : 'text-black'
+              }
+            >
+              Contact
+            </NavLink>
+          </li>
+        </ul>
+      </div>
     </nav>
   );
 };

@@ -8,9 +8,7 @@ const Home = () => {
     <div>
       <NavigationBar />
       <div className="p-4">
-        <h1 className="text-2xl font-poppins">Welcome to the Home Page</h1>
-        <p className="font-poppins">This is a paragraph with the Poppins font.</p>
-        <p>This is a paragraph with the default font.</p>
+        <h1 className="text-2xl font-bold text-center">Welcome to the Home Page</h1>
       </div>
     </div>
   );
