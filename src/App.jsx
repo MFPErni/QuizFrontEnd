@@ -1,5 +1,3 @@
-// src/App.jsx
-
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import LoginPage from './components/LoginPage';
@@ -9,6 +7,7 @@ import Categories from './components/Categories';
 import HowToPlay from './components/HowToPlay';
 import About from './components/About';
 import Contact from './components/Contact';
+import QuizDetails from './components/QuizDetails'; // Import the new component
 
 function App() {
   return (
@@ -22,6 +21,7 @@ function App() {
         <Route path="/how-to-play" element={<HowToPlay />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/quiz/:quizTitle" element={<QuizDetails />} /> {/* Add this route */}
       </Routes>
     </Router>
   );
