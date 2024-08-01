@@ -7,8 +7,8 @@ import Categories from './components/Categories';
 import HowToPlay from './components/HowToPlay';
 import About from './components/About';
 import Contact from './components/Contact';
-import QuizDetails from './components/QuizDetails';
-import QuestionsPage from './components/QuestionsPage'; // Import the new component
+import QuizDetails from './components/QuizDetails'; // Import the QuizDetails component
+import QuizStart from './components/QuizStart'; // Import the QuizStart component
 
 function App() {
   return (
@@ -22,8 +22,8 @@ function App() {
         <Route path="/how-to-play" element={<HowToPlay />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/quiz/:quizTitle" element={<QuizDetails />} />
-        <Route path="/questions" element={<QuestionsPage />} /> {/* Add this route */}
+        <Route path="/quiz/:quizId" element={<QuizDetails />} /> {/* Route for QuizDetails */}
+        <Route path="/quiz-start/:quizId" element={<QuizStart />} /> {/* Route for QuizStart */}
       </Routes>
     </Router>
   );

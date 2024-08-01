@@ -9,34 +9,41 @@ const Categories = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchCategoriesAndQuizzes = async () => {
+    const fetchCategories = async () => {
       try {
-        const categoryResponse = await axios.get('/quiz/categories');
-        const categoryTitles = categoryResponse.data.$values || [];
+        const response = await axios.get('/quiz/categories');
+        const categoryTitles = response.data.$values;
         setCategories(categoryTitles);
 
-        const quizzes = {};
-        for (let i = 0; i < categoryTitles.length; i++) {
-          const categoryId = i + 1;
-          const quizResponse = await axios.get(`/quiz/category/${categoryId}`);
-          quizzes[categoryId] = quizResponse.data.$values || [];
-        }
-        setQuizzesByCategory(quizzes);
+        // Fetch quizzes for each category
+        categoryTitles.forEach(async (categoryTitle, index) => {
+          const categoryId = index + 1; // Assuming category IDs are 1-based and sequential
+          const quizResponse = await axios.get(`/quiz/quizzes-by-category/${categoryId}`);
+          const quizData = quizResponse.data.$values;
+
+          setQuizzesByCategory(prevState => ({
+            ...prevState,
+            [categoryTitle]: quizData
+          }));
+        });
       } catch (error) {
         console.error('Error fetching categories or quizzes:', error);
       }
     };
 
-    fetchCategoriesAndQuizzes();
+    fetchCategories();
   }, []);
 
-  const handleQuizClick = (quizTitle, quizDescription, categoryTitle) => {
-    console.log(`Quiz Title: ${quizTitle}`);
-    console.log(`Quiz Description: ${quizDescription}`);
-    console.log(`Category Title: ${categoryTitle}`);
-    navigate(`/quiz/${encodeURIComponent(quizTitle)}`, {
-      state: { description: quizDescription },
-    }); // Navigate to the quiz details page with state
+  const handleCardClick = (quiz) => {
+    console.log('Quiz Data:', quiz);
+    navigate(`/quiz/${quiz.quizID}`, {
+      state: {
+        quizID: quiz.quizID,
+        quizTitle: quiz.title,
+        quizDescription: quiz.description,
+        quizCategoryTitle: quiz.categoryTitle
+      }
+    });
   };
 
   return (
@@ -44,32 +51,28 @@ const Categories = () => {
       <NavigationBar />
       <div className="p-4">
         <h1 className="text-2xl font-bold">Categories Page</h1>
-        <div className="mt-4">
+        <ul>
           {categories.map((category, index) => (
-            <div key={index} className="mb-6">
-              <div className="p-2 border-b border-gray-200">
-                {category}
+            <li key={index} className="py-2 border-b border-gray-200">
+              <div className="flex justify-between items-center">
+                <span className="text-xl font-semibold">{category}</span>
               </div>
-              <div className="mt-2">
-                {quizzesByCategory[index + 1] && quizzesByCategory[index + 1].length > 0 ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {quizzesByCategory[index + 1].map((quiz, quizIndex) => (
-                      <div
-                        key={quizIndex}
-                        className="p-4 border rounded shadow"
-                        onClick={() => handleQuizClick(quiz.title, quiz.description, quiz.categoryTitle)} // Add onClick handler
-                      >
-                        <h3 className="text-lg font-bold">{quiz.title}</h3>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="text-gray-500">No quizzes available for this category.</p>
-                )}
-              </div>
-            </div>
+              {quizzesByCategory[category] && (
+                <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                  {quizzesByCategory[category].map((quiz, quizIndex) => (
+                    <div
+                      key={quizIndex}
+                      className="p-4 bg-white shadow rounded-lg cursor-pointer"
+                      onClick={() => handleCardClick(quiz)}
+                    >
+                      <h3 className="text-lg font-bold">{quiz.title}</h3>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     </div>
   );
