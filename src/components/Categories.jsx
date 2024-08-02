@@ -1,9 +1,13 @@
+// src/components/Categories.jsx
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from '../axios/axiosconfig';
 import NavigationBar from './NavigationBar';
+import useAuthRedirect from '../useAuthRedirect';
 
 const Categories = () => {
+  useAuthRedirect();
+
   const [categories, setCategories] = useState([]);
   const [quizzesByCategory, setQuizzesByCategory] = useState({});
   const navigate = useNavigate();
@@ -15,9 +19,8 @@ const Categories = () => {
         const categoryTitles = response.data.$values;
         setCategories(categoryTitles);
 
-        // Fetch quizzes for each category
         categoryTitles.forEach(async (categoryTitle, index) => {
-          const categoryId = index + 1; // Assuming category IDs are 1-based and sequential
+          const categoryId = index + 1;
           const quizResponse = await axios.get(`/quiz/quizzes-by-category/${categoryId}`);
           const quizData = quizResponse.data.$values;
 
@@ -46,11 +49,21 @@ const Categories = () => {
     });
   };
 
+  const handleSeeMyQuizzesClick = () => {
+    navigate('/create-a-quiz');
+  };
+
   return (
     <div>
       <NavigationBar />
       <div className="p-4">
         <h1 className="text-2xl font-bold">Categories Page</h1>
+        <button 
+          className="mt-4 px-4 py-2 bg-green-500 text-white rounded"
+          onClick={handleSeeMyQuizzesClick}
+        >
+          See My Quizzes!
+        </button>
         <ul>
           {categories.map((category, index) => (
             <li key={index} className="py-2 border-b border-gray-200">

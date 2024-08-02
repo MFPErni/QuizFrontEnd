@@ -1,27 +1,33 @@
+// src/components/QuizStart.jsx
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux'; // Add this import statement
+import { useLocation, useNavigate } from 'react-router-dom';
 import axios from '../axios/axiosconfig';
 import NavigationBar from './NavigationBar';
+import useAuthRedirect from '../useAuthRedirect';
 
 const QuizStart = () => {
+  useAuthRedirect();
+
   const location = useLocation();
+  const navigate = useNavigate();
   const { quizID, quizTitle, quizDescription, quizCategoryTitle } = location.state;
   const [questions, setQuestions] = useState([]);
-  const [answers, setAnswers] = useState({}); // State to store answers for each question
-  const [selectedAnswer, setSelectedAnswer] = useState(null); // State to track the selected answer
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0); // State to track the current question index
+  const [answers, setAnswers] = useState({});
+  const [selectedAnswer, setSelectedAnswer] = useState(null);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [score, setScore] = useState(0);
 
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
         const response = await axios.get(`/question/questions-by-quiz/${quizID}`);
-        const questionData = response.data.$values; // Extract the values
+        const questionData = response.data.$values;
         setQuestions(questionData);
 
-        // Fetch answers for each question
         questionData.forEach(async (question) => {
           const answerResponse = await axios.get(`/answer/answers-by-question/${question.questionID}`);
-          const answersData = answerResponse.data.$values; // Extract the values
+          const answersData = answerResponse.data.$values;
           setAnswers(prevState => ({
             ...prevState,
             [question.questionID]: answersData
@@ -41,11 +47,18 @@ const QuizStart = () => {
 
     setSelectedAnswer({ questionID, answerID, isCorrect });
 
-    // Move to the next question after a short delay
+    if (isCorrect) {
+      setScore(prevScore => prevScore + 1);
+    }
+
     setTimeout(() => {
       setCurrentQuestionIndex(prevIndex => prevIndex + 1);
-      setSelectedAnswer(null); // Reset selected answer for the next question
-    }, 1000); // Adjust the delay as needed
+      setSelectedAnswer(null);
+    }, 1000);
+  };
+
+  const handleBackToCategories = () => {
+    navigate('/categories');
   };
 
   const currentQuestion = questions[currentQuestionIndex];
@@ -82,6 +95,13 @@ const QuizStart = () => {
         {!currentQuestion && (
           <div className="mt-4">
             <p className="text-xl font-bold">Quiz Completed!</p>
+            <p className="text-md">Final Score: {score}</p>
+            <button 
+              className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
+              onClick={handleBackToCategories}
+            >
+              Back to Categories
+            </button>
           </div>
         )}
       </div>
