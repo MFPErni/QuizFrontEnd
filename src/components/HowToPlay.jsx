@@ -1,9 +1,14 @@
 // src/components/HowToPlay.jsx
-
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux'; // Add this import statement
 import NavigationBar from './NavigationBar';
+import useAuthRedirect from '../useAuthRedirect';
 
 const HowToPlay = () => {
+  useAuthRedirect();
+
+  const username = useSelector((state) => state.user.username);
+
   return (
     <div>
       <NavigationBar />
