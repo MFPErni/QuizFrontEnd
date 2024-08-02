@@ -9,6 +9,11 @@ const Home = () => {
 
   const username = useSelector((state) => state.user.username); // Get the username from the Redux store
 
+  useEffect(() => {
+    console.log('Current Username:', username);
+  }, [username]);
+
+
   return (
     <div>
       <NavigationBar />

@@ -13,7 +13,8 @@ import About from './components/About';
 import Contact from './components/Contact';
 import QuizDetails from './components/QuizDetails';
 import QuizStart from './components/QuizStart';
-import CreateAQuiz from './components/CreateAQuiz';
+import SeeMyQuizzes from './components/SeeMyQuizzes';
+import CreateQuiz from './components/CreateQuiz'; // Import the new component
 
 function App() {
   return (
@@ -31,7 +32,8 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/quiz/:quizId" element={<QuizDetails />} />
           <Route path="/quiz-start/:quizId" element={<QuizStart />} />
-          <Route path="/create-a-quiz" element={<CreateAQuiz />} />
+          <Route path="/see-my-quizzes" element={<SeeMyQuizzes />} />
+          <Route path="/create-quiz" element={<CreateQuiz />} /> {/* Add the new route */}
         </Routes>
       </Router>
     </Provider>

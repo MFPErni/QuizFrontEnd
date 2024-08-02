@@ -50,7 +50,7 @@ const Categories = () => {
   };
 
   const handleSeeMyQuizzesClick = () => {
-    navigate('/create-a-quiz');
+    navigate('/see-my-quizzes');
   };
 
   return (
