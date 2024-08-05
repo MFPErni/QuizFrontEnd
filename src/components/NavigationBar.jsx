@@ -1,11 +1,17 @@
 import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 const NavigationBar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
+  };
+
+  const handleLogout = () => {
+    // Perform any necessary cleanup, such as clearing user data or tokens
+    navigate('/login');
   };
 
   return (
@@ -78,6 +84,14 @@ const NavigationBar = () => {
             >
               Contact
             </NavLink>
+          </li>
+          <li>
+            <button
+              onClick={handleLogout}
+              className="text-black font-bold"
+            >
+              Logout
+            </button>
           </li>
         </ul>
       </div>

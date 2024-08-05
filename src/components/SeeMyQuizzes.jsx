@@ -1,4 +1,3 @@
-// src/components/SeeMyQuizzes.jsx
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -99,6 +98,10 @@ const SeeMyQuizzes = () => {
     navigate('/create-quiz');
   };
 
+  const handleEditClick = (quizID) => {
+    navigate(`/edit-quiz/${quizID}`);
+  };
+
   return (
     <div>
       <NavigationBar />
@@ -106,7 +109,7 @@ const SeeMyQuizzes = () => {
         <div className="flex justify-between items-center">
           <h1 className="text-2xl font-bold">Your Quizzes</h1>
           <button 
-            className="px-4 py-2 bg-green-500 text-white rounded"
+            className="px-4 py-2 bg-purple-500 text-white rounded"
             onClick={handleCreateQuizClick}
           >
             Create a Quiz!
@@ -119,8 +122,8 @@ const SeeMyQuizzes = () => {
               <p className="text-md">{quiz.categoryTitle}</p>
               <div className="mt-2">
                 <button 
-                  className="mr-2 px-4 py-2 bg-yellow-500 text-white rounded"
-                  onClick={() => { /* Add Edit functionality here later */ }}
+                  className="mr-2 px-4 py-2 bg-blue-500 text-white rounded"
+                  onClick={() => handleEditClick(quiz.quizID)}
                 >
                   Edit
                 </button>

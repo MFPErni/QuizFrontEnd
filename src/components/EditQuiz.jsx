@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import axios from '../axios/axiosconfig';
 import NavigationBar from './NavigationBar';
 import useAuthRedirect from '../useAuthRedirect';
-import axios from '../axios/axiosconfig';
 
-const CreateQuiz = () => {
+const EditQuiz = () => {
   useAuthRedirect();
 
+  const { quizId } = useParams(); // Correctly retrieve the quizId parameter
   const username = useSelector((state) => state.user.username);
   const navigate = useNavigate();
   const [adminID, setAdminID] = useState(null);
@@ -17,7 +18,9 @@ const CreateQuiz = () => {
     categoryID: ''
   });
   const [categories, setCategories] = useState([]);
-  const [questions, setQuestions] = useState([{ questionText: '', answers: [{ answerText: '', isCorrect: true }, { answerText: '', isCorrect: false }] }]);
+  const [questions, setQuestions] = useState([]);
+  const [removedQuestions, setRemovedQuestions] = useState([]);
+  const [removedAnswers, setRemovedAnswers] = useState([]);
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
@@ -46,6 +49,39 @@ const CreateQuiz = () => {
 
     fetchAdminID();
   }, [username]);
+
+  useEffect(() => {
+    const fetchQuizData = async () => {
+      try {
+        const response = await axios.get(`/quiz/${quizId}`);
+        const quizData = response.data;
+        console.log('Fetched Quiz Data:', quizData); // Log the quiz data
+
+        setFormData({
+          title: quizData.title,
+          description: quizData.description,
+          categoryID: quizData.categoryID
+        });
+
+        // Extract the questions array from the $values property
+        const questionsArray = Array.isArray(quizData.questions.$values) ? quizData.questions.$values : [];
+
+        setQuestions(questionsArray.map(question => ({
+          questionID: question.questionID,
+          questionText: question.questionText,
+          answers: Array.isArray(question.answers.$values) ? question.answers.$values.map(answer => ({
+            answerID: answer.answerID,
+            answerText: answer.answerText,
+            isCorrect: answer.isCorrect
+          })) : []
+        })));
+      } catch (error) {
+        console.error('Error fetching quiz data:', error);
+      }
+    };
+
+    fetchQuizData();
+  }, [quizId]);
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -80,12 +116,14 @@ const CreateQuiz = () => {
     setQuestions([...questions, { questionText: '', answers: [{ answerText: '', isCorrect: true }, { answerText: '', isCorrect: false }] }]);
   };
 
-  const handleRemoveQuestion = () => {
-    if (questions.length > 1) {
-      const newQuestions = [...questions];
-      newQuestions.pop();
-      setQuestions(newQuestions);
+  const handleRemoveQuestion = (index) => {
+    const questionToRemove = questions[index];
+    if (questionToRemove.questionID) {
+      setRemovedQuestions([...removedQuestions, questionToRemove.questionID]);
     }
+    const newQuestions = [...questions];
+    newQuestions.splice(index, 1);
+    setQuestions(newQuestions);
   };
 
   const handleAddAnswer = (questionIndex) => {
@@ -94,12 +132,14 @@ const CreateQuiz = () => {
     setQuestions(newQuestions);
   };
 
-  const handleRemoveAnswer = (questionIndex) => {
-    const newQuestions = [...questions];
-    if (newQuestions[questionIndex].answers.length > 2) {
-      newQuestions[questionIndex].answers.pop();
-      setQuestions(newQuestions);
+  const handleRemoveAnswer = (questionIndex, answerIndex) => {
+    const answerToRemove = questions[questionIndex].answers[answerIndex];
+    if (answerToRemove.answerID) {
+      setRemovedAnswers([...removedAnswers, answerToRemove.answerID]);
     }
+    const newQuestions = [...questions];
+    newQuestions[questionIndex].answers.splice(answerIndex, 1);
+    setQuestions(newQuestions);
   };
 
   const validateForm = () => {
@@ -122,27 +162,40 @@ const CreateQuiz = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleCreateQuiz = async () => {
+  const handleUpdateQuiz = async () => {
     if (!validateForm()) return;
 
     try {
-      const response = await axios.post('http://localhost:5026/api/quiz', {
+      // Delete removed questions and answers
+      for (const questionID of removedQuestions) {
+        await axios.delete(`/question/${questionID}`);
+      }
+      for (const answerID of removedAnswers) {
+        await axios.delete(`/answer/${answerID}`);
+      }
+
+      const response = await axios.put(`/quiz/update-quiz/${quizId}`, {
+        quizID: quizId,
         adminID: adminID,
         title: formData.title,
         description: formData.description,
         categoryID: formData.categoryID,
-        questions: questions.map(question => ({
+        questions: questions.map((question) => ({
+          questionID: question.questionID,
           questionText: question.questionText,
-          answers: question.answers.map(answer => ({
+          quizID: quizId,
+          answers: question.answers.map((answer) => ({
+            answerID: answer.answerID,
             answerText: answer.answerText,
-            isCorrect: answer.isCorrect
+            isCorrect: answer.isCorrect,
+            questionID: question.questionID
           }))
         }))
       });
-      console.log('Quiz created successfully:', response.data);
-      navigate('/categories');
+      console.log('Quiz updated successfully:', response.data);
+      navigate('/see-my-quizzes');
     } catch (error) {
-      console.error('Error creating quiz:', error.response ? error.response.data : error.message);
+      console.error('Error updating quiz:', error.response ? error.response.data : error.message);
     }
   };
 
@@ -150,7 +203,7 @@ const CreateQuiz = () => {
     <div>
       <NavigationBar />
       <div className="p-4 max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold mb-6 text-center">Create a New Quiz</h1>
+        <h1 className="text-3xl font-bold mb-6 text-center">Edit Quiz</h1>
         <form>
           <div className="mb-6">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="title">
@@ -232,6 +285,13 @@ const CreateQuiz = () => {
                       {answer.isCorrect ? 'True' : 'False'}
                     </button>
                     {errors[`answer-${questionIndex}-${answerIndex}`] && <p className="text-red-500 text-xs italic ml-2">{errors[`answer-${questionIndex}-${answerIndex}`]}</p>}
+                    <button
+                      type="button"
+                      className="ml-2 px-4 py-2 bg-red-500 text-white rounded"
+                      onClick={() => handleRemoveAnswer(questionIndex, answerIndex)}
+                    >
+                      Remove Answer
+                    </button>
                   </div>
                 ))}
                 {errors[`question-${questionIndex}-true`] && <p className="text-red-500 text-xs italic">{errors[`question-${questionIndex}-true`]}</p>}
@@ -247,9 +307,9 @@ const CreateQuiz = () => {
                     <button
                       type="button"
                       className="px-4 py-2 bg-red-500 text-white rounded"
-                      onClick={() => handleRemoveAnswer(questionIndex)}
+                      onClick={() => handleRemoveQuestion(questionIndex)}
                     >
-                      Remove Answer
+                      Remove Question
                     </button>
                   )}
                 </div>
@@ -267,7 +327,7 @@ const CreateQuiz = () => {
                 <button
                   type="button"
                   className="px-4 py-2 bg-red-500 text-white rounded"
-                  onClick={handleRemoveQuestion}
+                  onClick={() => handleRemoveQuestion(questions.length - 1)}
                 >
                   Remove Question
                 </button>
@@ -278,9 +338,9 @@ const CreateQuiz = () => {
             <button
               type="button"
               className="px-6 py-3 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded focus:outline-none focus:shadow-outline"
-              onClick={handleCreateQuiz}
+              onClick={handleUpdateQuiz}
             >
-              Create Quiz
+              Update Quiz
             </button>
           </div>
         </form>
@@ -289,4 +349,4 @@ const CreateQuiz = () => {
   );
 };
 
-export default CreateQuiz;
+export default EditQuiz;
