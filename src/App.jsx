@@ -1,4 +1,3 @@
-// src/App.js
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { Provider } from 'react-redux';
@@ -34,6 +33,7 @@ function App() {
           <Route path="/quiz-start/:quizId" element={<QuizStart />} />
           <Route path="/see-my-quizzes" element={<SeeMyQuizzes />} />
           <Route path="/create-quiz" element={<CreateQuiz />} /> {/* Add the new route */}
+          <Route path="/quiz-details/:quizId" element={<QuizDetails />} /> {/* Add the new route */}
         </Routes>
       </Router>
     </Provider>

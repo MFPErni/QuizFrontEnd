@@ -1,4 +1,3 @@
-// src/components/CreateQuiz.jsx
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import NavigationBar from './NavigationBar';
@@ -9,10 +8,12 @@ const CreateQuiz = () => {
   useAuthRedirect();
 
   const username = useSelector((state) => state.user.username);
+  const [adminID, setAdminID] = useState(null); // New state for adminID
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    categoryID: ''
+    categoryID: '',
+    numberOfQuestions: '' // New state for number of questions
   });
   const [categories, setCategories] = useState([]);
 
@@ -30,16 +31,30 @@ const CreateQuiz = () => {
     fetchCategories();
   }, []);
 
+  useEffect(() => {
+    const fetchAdminID = async () => {
+      try {
+        const response = await axios.get(`/admin/get-admin-id?username=${username}`);
+        setAdminID(response.data); // Set the adminID
+      } catch (error) {
+        console.error('Error fetching admin ID:', error);
+      }
+    };
+
+    fetchAdminID();
+  }, [username]);
+
   const handleChange = (e) => {
     const { id, value } = e.target;
     setFormData({ ...formData, [id]: value });
   };
 
   const handleCreateQuiz = () => {
-    console.log('Admin Username:', username);
+    console.log('Admin ID:', adminID); // Log the adminID
     console.log('Title:', formData.title);
     console.log('Description:', formData.description);
     console.log('Category ID:', formData.categoryID);
+    console.log('Number of Questions:', formData.numberOfQuestions); // Log the number of questions
   };
 
   return (
@@ -47,6 +62,10 @@ const CreateQuiz = () => {
       <NavigationBar />
       <div className="p-4">
         <h1 className="text-2xl font-bold">Create a New Quiz</h1>
+        <div className="mb-4 p-4 bg-white shadow rounded-lg">
+          <h2 className="text-xl font-bold">Add Question</h2>
+          {/* Placeholder for future functionalities */}
+        </div>
         <form>
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="title">
@@ -91,6 +110,18 @@ const CreateQuiz = () => {
                 </option>
               ))}
             </select>
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="numberOfQuestions">
+              Number of Questions
+            </label>
+            <input
+              type="number"
+              id="numberOfQuestions"
+              value={formData.numberOfQuestions}
+              onChange={handleChange}
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            />
           </div>
           <div className="flex items-center justify-between mt-4">
             <button
