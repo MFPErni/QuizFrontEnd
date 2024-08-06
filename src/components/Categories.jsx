@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from '../axios/axiosconfig';
 import NavigationBar from './NavigationBar';
 import useAuthRedirect from '../useAuthRedirect';
+import BackgroundWrapper from './BackgroundWrapper';
 
 const Categories = () => {
   useAuthRedirect();
@@ -68,13 +69,13 @@ const Categories = () => {
   };
 
   return (
-    <div>
+    <BackgroundWrapper>
       <NavigationBar />
-      <div className="p-4">
+      <div className="p-4 text-white">
         <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-bold">Categories Page</h1>
+          <h1 className="text-2xl font-poppins font-bold text-shadow-lg">Categories</h1>
           <button 
-            className="px-4 py-2 bg-purple-500 text-white rounded"
+            className="px-4 py-2 bg-purple-600 bg-opacity-80 text-white font-poppins font-bold text-shadow-lg rounded"
             onClick={handleSeeMyQuizzesClick}
           >
             See My Quizzes
@@ -82,20 +83,20 @@ const Categories = () => {
         </div>
         <ul className="mt-4">
           {categories.map((category, index) => (
-            <li key={index} className="py-2 border-b border-gray-200">
+            <li key={index} className="py-2">
               <div className="flex justify-between items-center">
-                <span className="text-xl font-semibold">{category}</span>
+                <span className="text-xl font-poppins font-semibold text-shadow-lg">{category}</span>
               </div>
               {quizzesByCategory[category] && (
                 <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                   {quizzesByCategory[category].map((quiz, quizIndex) => (
                     <div
                       key={quizIndex}
-                      className="p-4 bg-white shadow rounded-lg cursor-pointer"
+                      className="p-4 bg-black bg-opacity-80 shadow rounded-lg cursor-pointer"
                       onClick={() => handleCardClick(quiz.quizID, quiz.title, quiz.description, quiz.categoryTitle)}
                     >
-                      <h3 className="text-lg font-bold">{quiz.title}</h3>
-                      <p className="text-sm text-gray-500">Quiz ID: {quiz.quizID}</p>
+                      <h3 className="text-lg font-poppins font-bold text-white">{quiz.title}</h3>
+                      <p className="text-sm text-gray-300">Quiz ID: {quiz.quizID}</p>
                     </div>
                   ))}
                 </div>
@@ -104,7 +105,7 @@ const Categories = () => {
           ))}
         </ul>
       </div>
-    </div>
+    </BackgroundWrapper>
   );
 };
 

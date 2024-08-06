@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -7,7 +8,6 @@
   z-index: 3; /* Ensure the hamburger icon is above the menu */
   width: fit-content;
   height: auto;
-  background-color: #fff;
   margin: 1rem; /* Use rem for margin */
   position: relative;
   border-radius: 0.25rem; /* Use rem for border-radius */
@@ -17,7 +17,7 @@
   width: 2rem; /* Use rem for width */
   height: 0.2rem; /* Use rem for height */
   margin: 0.4rem 0; /* Use rem for margin */
-  background-color: #000;
+  background-color: #fff; /* Change to white */
   border-radius: 50px;
   transition: 0.2s;
 }
@@ -36,15 +36,15 @@
   position: fixed; /* Use fixed positioning to cover the icon */
   top: 0; /* Start from the top of the viewport */
   left: 0; /* Align to the left side */
-  width: 35vw; /* Cover 35% of the viewport width */
   height: 100vh; /* Full height of the viewport */
-  background-color: white; /* Change background color to yellow */
+  background-color: rgba(0, 0, 10, 0.4); /* Blue background with 40% opacity */
   z-index: 2; /* Ensure it is below the hamburger icon */
   padding: 1.25rem; /* Use rem for padding */
   box-shadow: 0.125rem 0 0.3125rem rgba(0, 0, 0, 0.1); /* Use rem for shadow */
+  backdrop-filter: blur(10px); /* Apply a blur effect for a more appealing look */
 }
 
 /* Ensure the nav links are not hidden behind the icon */
 .menu_wrapper ul {
-  margin-top: 3rem; /* Add margin to push the links below the icon */
+  margin-top: 4rem; /* Increase margin to push the links further down */
 }

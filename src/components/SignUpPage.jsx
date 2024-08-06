@@ -19,14 +19,12 @@ const SignUpPage = () => {
   };
 
   const handleSignUp = async () => {
-    // Validate fields
     const newErrors = {};
     if (!formData.firstName) newErrors.firstName = 'First Name is required';
     if (!formData.lastName) newErrors.lastName = 'Last Name is required';
     if (!formData.username) newErrors.username = 'Username is required';
     if (!formData.password) newErrors.password = 'Password is required';
 
-    // Check if username already exists
     if (formData.username) {
       try {
         const response = await axios.get(`/admin/username-exists?username=${formData.username}`);
@@ -40,14 +38,11 @@ const SignUpPage = () => {
 
     setErrors(newErrors);
 
-    // If there are errors, do not proceed
     if (Object.keys(newErrors).length > 0) return;
 
-    // Create new admin
     try {
       const response = await axios.post('/admin/create-admin', formData);
       console.log('Admin created successfully:', response.data);
-      // Redirect to login page
       navigate('/login');
     } catch (error) {
       console.error('Error creating admin:', error);
@@ -55,13 +50,32 @@ const SignUpPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-6 text-center">Sign Up</h2>
+    <div className="relative min-h-screen flex items-center justify-center bg-gradient-to-b from-blue-900 to-black px-4 font-poppins">
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          {[...Array(20)].map((_, i) => (
+            <span
+              key={i}
+              className={`absolute top-[-120px] h-[100px] w-[100px] z-[-1] animate-zigzagSpin`}
+              style={{
+                left: `${(i % 10) * 10}%`,
+                animationDelay: `${i * 0.6}s`,
+                backgroundColor: i % 2 === 0 ? 'transparent' : undefined,
+                borderColor: i % 2 === 0 ? 'cyan' : undefined,
+                borderWidth: i % 2 === 0 ? '5px' : undefined,
+                width: i % 2 === 0 ? undefined : `${100 + (i % 10) * 20}px`,
+                height: i % 2 === 0 ? undefined : `${100 + (i % 10) * 20}px`,
+              }}
+            />
+          ))}
+        </div>
+      </div>
+      <div className="relative z-10 bg-white bg-opacity-20 backdrop-blur-lg p-8 rounded-lg shadow-lg w-full max-w-md mx-auto border border-gray-200">
+        <h2 className="text-2xl font-bold mb-6 text-center text-white">Sign Up</h2>
         <form>
           {['firstName', 'lastName', 'username', 'password'].map((field) => (
             <div className="mb-4" key={field}>
-              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor={field}>
+              <label className="block text-gray-200 text-sm font-bold mb-2" htmlFor={field}>
                 {field.charAt(0).toUpperCase() + field.slice(1).replace('Name', ' Name')}
               </label>
               <input
@@ -76,7 +90,7 @@ const SignUpPage = () => {
             </div>
           ))}
           <div className="mt-4 text-center">
-            <Link to="/login" className="text-blue-500 hover:text-blue-700">
+            <Link to="/login" className="text-blue-300 hover:text-blue-500">
               Already have an account?
             </Link>
           </div>

@@ -1,26 +1,29 @@
-// src/components/Home.jsx
+// Home.jsx
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import NavigationBar from './NavigationBar';
-import useAuthRedirect from '../useAuthRedirect'; // Import the custom hook
+import useAuthRedirect from '../useAuthRedirect';
+import BackgroundWrapper from './BackgroundWrapper';
 
 const Home = () => {
-  useAuthRedirect(); // Use the custom hook
+  useAuthRedirect();
 
-  const username = useSelector((state) => state.user.username); // Get the username from the Redux store
+  const username = useSelector((state) => state.user.username);
 
   useEffect(() => {
     console.log('Current Username:', username);
   }, [username]);
 
-
   return (
-    <div>
+    <BackgroundWrapper>
       <NavigationBar />
-      <div className="p-4">
-        <h1 className="text-2xl font-bold text-center">Welcome to the Home Page</h1>
+      <div className="absolute inset-0 flex items-center justify-center text-center text-white">
+        <div className="p-4">
+          <h1 className="text-2xl font-bold text-shadow-lg">Welcome to the MPediments</h1>
+          <p className="mt-2 text-shadow-lg">Transforming Impediments into Opportunities!</p>
+        </div>
       </div>
-    </div>
+    </BackgroundWrapper>
   );
 };
 

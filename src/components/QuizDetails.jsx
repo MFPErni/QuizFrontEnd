@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import axios from '../axios/axiosconfig';
 import NavigationBar from './NavigationBar';
 import useAuthRedirect from '../useAuthRedirect';
+import BackgroundWrapper from './BackgroundWrapper';
 
 const QuizDetails = () => {
   useAuthRedirect();
@@ -39,21 +40,33 @@ const QuizDetails = () => {
     }
   };
 
+  const handleBackClick = () => {
+    navigate(-1); // Navigate back to the previous page
+  };
+
   return (
-    <div>
+    <BackgroundWrapper>
       <NavigationBar />
-      <div className="p-4">
-        <h2 className="text-xl font-bold">{quizTitle}</h2>
-        <p className="text-md">{quizDescription}</p>
+      <div className="p-4 text-white">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl font-poppins font-bold text-shadow-lg">{quizTitle}</h2>
+          <button 
+            className="px-4 py-2 bg-pink-600 bg-opacity-80 text-white font-poppins font-bold text-shadow-lg rounded"
+            onClick={handleBackClick}
+          >
+            Back
+          </button>
+        </div>
+        <p className="text-md font-poppins">{quizDescription}</p>
         <button 
-          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
+          className="mt-4 px-4 py-2 bg-purple-600 bg-opacity-80 text-white font-poppins font-bold text-shadow-lg rounded"
           onClick={handleStartClick}
         >
           Start
         </button>
         {message && <p className="mt-2 text-red-500">{message}</p>}
       </div>
-    </div>
+    </BackgroundWrapper>
   );
 };
 

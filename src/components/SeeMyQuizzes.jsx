@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from '../axios/axiosconfig';
 import NavigationBar from './NavigationBar';
 import useAuthRedirect from '../useAuthRedirect';
+import BackgroundWrapper from './BackgroundWrapper';
 
 const SeeMyQuizzes = () => {
   useAuthRedirect();
@@ -103,32 +104,32 @@ const SeeMyQuizzes = () => {
   };
 
   return (
-    <div>
+    <BackgroundWrapper>
       <NavigationBar />
-      <div className="p-4">
+      <div className="p-4 text-white">
         <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-bold">Your Quizzes</h1>
+          <h1 className="text-2xl font-poppins font-bold text-shadow-lg">Your Quizzes</h1>
           <button 
-            className="px-4 py-2 bg-purple-500 text-white rounded"
+            className="px-4 py-2 bg-purple-600 bg-opacity-80 text-white font-poppins font-bold text-shadow-lg rounded"
             onClick={handleCreateQuizClick}
           >
             Create a Quiz!
           </button>
         </div>
-        <div className="mt-4">
+        <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {quizzes.map((quiz) => (
-            <div key={quiz.quizID} className="py-2 border-b border-gray-200">
-              <h3 className="text-lg font-bold">{quiz.title}</h3>
-              <p className="text-md">{quiz.categoryTitle}</p>
-              <div className="mt-2">
+            <div key={quiz.quizID} className="p-4 bg-black bg-opacity-80 shadow rounded-lg">
+              <h3 className="text-lg font-poppins font-bold text-white">{quiz.title}</h3>
+              <p className="text-sm text-gray-300">{quiz.categoryTitle}</p>
+              <div className="mt-2 flex justify-between">
                 <button 
-                  className="mr-2 px-4 py-2 bg-blue-500 text-white rounded"
+                  className="px-4 py-2 bg-green-500 text-white font-poppins font-bold bg-opacity-80 text-shadow-lg rounded"
                   onClick={() => handleEditClick(quiz.quizID)}
                 >
                   Edit
                 </button>
                 <button 
-                  className="px-4 py-2 bg-red-500 text-white rounded"
+                  className="px-4 py-2 bg-red-500 bg-opacity-80 text-white font-poppins font-bold text-shadow-lg rounded"
                   onClick={() => handleDeleteClick(quiz.quizID)}
                 >
                   Delete
@@ -138,7 +139,7 @@ const SeeMyQuizzes = () => {
           ))}
         </div>
       </div>
-    </div>
+    </BackgroundWrapper>
   );
 };
 

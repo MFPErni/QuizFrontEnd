@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import NavigationBar from './NavigationBar';
 import useAuthRedirect from '../useAuthRedirect';
 import axios from '../axios/axiosconfig';
+import BackgroundWrapper from './BackgroundWrapper';
 
 const CreateQuiz = () => {
   useAuthRedirect();
@@ -146,14 +147,26 @@ const CreateQuiz = () => {
     }
   };
 
+  const handleBackClick = () => {
+    navigate('/see-my-quizzes');
+  };
+
   return (
-    <div>
+    <BackgroundWrapper>
       <NavigationBar />
-      <div className="p-4 max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold mb-6 text-center">Create a New Quiz</h1>
+      <div className="p-4 max-w-4xl mx-auto text-white">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-3xl font-poppins font-bold text-shadow-lg">Create a New Quiz</h1>
+          <button 
+            className="px-4 py-2 bg-pink-600 bg-opacity-80 text-white font-poppins font-bold text-shadow-lg rounded"
+            onClick={handleBackClick}
+          >
+            Back
+          </button>
+        </div>
         <form>
           <div className="mb-6">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="title">
+            <label className="block text-sm font-poppins font-bold mb-2" htmlFor="title">
               Title
             </label>
             <input
@@ -167,7 +180,7 @@ const CreateQuiz = () => {
             {errors.title && <p className="text-red-500 text-xs italic">{errors.title}</p>}
           </div>
           <div className="mb-6">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="description">
+            <label className="block text-sm font-poppins font-bold mb-2" htmlFor="description">
               Description
             </label>
             <textarea
@@ -180,7 +193,7 @@ const CreateQuiz = () => {
             {errors.description && <p className="text-red-500 text-xs italic">{errors.description}</p>}
           </div>
           <div className="mb-6">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="categoryID">
+            <label className="block text-sm font-poppins font-bold mb-2" htmlFor="categoryID">
               Category
             </label>
             <select
@@ -199,11 +212,11 @@ const CreateQuiz = () => {
             </select>
             {errors.categoryID && <p className="text-red-500 text-xs italic">{errors.categoryID}</p>}
           </div>
-          <div className="mb-6 p-4 bg-white shadow rounded-lg">
-            <h2 className="text-2xl font-bold mb-4">Add Questions</h2>
+          <div className="mb-6 p-4 bg-black bg-opacity-80 shadow rounded-lg">
+            <h2 className="text-2xl font-poppins font-bold mb-4">Add Questions</h2>
             {questions.map((question, questionIndex) => (
               <div key={questionIndex} className="mb-6">
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor={`question-${questionIndex}`}>
+                <label className="block text-sm font-poppins font-bold mb-2" htmlFor={`question-${questionIndex}`}>
                   Question {questionIndex + 1}
                 </label>
                 <input
@@ -226,7 +239,7 @@ const CreateQuiz = () => {
                     />
                     <button
                       type="button"
-                      className={`shadow appearance-none border rounded py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${answer.isCorrect ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+                      className={`shadow appearance-none border rounded py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${answer.isCorrect ? 'bg-green-500 text-white font-poppins font-bold text-shadow-lg' : 'bg-red-500 text-white font-poppins font-bold text-shadow-lg'}`}
                       onClick={() => handleToggleCorrect(questionIndex, answerIndex)}
                     >
                       {answer.isCorrect ? 'True' : 'False'}
@@ -238,7 +251,7 @@ const CreateQuiz = () => {
                 <div className="flex space-x-4 mt-4">
                   <button
                     type="button"
-                    className="px-4 py-2 bg-blue-500 text-white rounded"
+                    className="px-4 py-2 bg-blue-500 bg-opacity-80 text-white font-poppins font-bold text-shadow-lg rounded"
                     onClick={() => handleAddAnswer(questionIndex)}
                   >
                     Add Answer
@@ -246,7 +259,7 @@ const CreateQuiz = () => {
                   {question.answers.length > 2 && (
                     <button
                       type="button"
-                      className="px-4 py-2 bg-red-500 text-white rounded"
+                      className="px-4 py-2 bg-red-500 text-white font-poppins font-bold text-shadow-lg rounded"
                       onClick={() => handleRemoveAnswer(questionIndex)}
                     >
                       Remove Answer
@@ -258,7 +271,7 @@ const CreateQuiz = () => {
             <div className="flex space-x-4 mt-4">
               <button
                 type="button"
-                className="px-4 py-2 bg-blue-500 text-white rounded"
+                className="px-4 py-2 bg-blue-500 bg-opacity-80 text-white font-poppins font-bold text-shadow-lg rounded"
                 onClick={handleAddQuestion}
               >
                 Add Question
@@ -266,7 +279,7 @@ const CreateQuiz = () => {
               {questions.length > 1 && (
                 <button
                   type="button"
-                  className="px-4 py-2 bg-red-500 text-white rounded"
+                  className="px-4 py-2 bg-red-500 text-white font-poppins font-bold text-shadow-lg rounded"
                   onClick={handleRemoveQuestion}
                 >
                   Remove Question
@@ -277,7 +290,7 @@ const CreateQuiz = () => {
           <div className="flex items-center justify-center mt-8">
             <button
               type="button"
-              className="px-6 py-3 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded focus:outline-none focus:shadow-outline"
+              className="px-6 py-3 bg-purple-500 hover:bg-blue-700 bg-opacity-80 text-white font-poppins font-bold text-shadow-lg rounded focus:outline-none focus:shadow-outline"
               onClick={handleCreateQuiz}
             >
               Create Quiz
@@ -285,7 +298,7 @@ const CreateQuiz = () => {
           </div>
         </form>
       </div>
-    </div>
+    </BackgroundWrapper>
   );
 };
 

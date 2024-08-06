@@ -1,10 +1,10 @@
-// src/components/QuizStart.jsx
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux'; // Add this import statement
+import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from '../axios/axiosconfig';
 import NavigationBar from './NavigationBar';
 import useAuthRedirect from '../useAuthRedirect';
+import BackgroundWrapper from './BackgroundWrapper';
 
 const QuizStart = () => {
   useAuthRedirect();
@@ -64,28 +64,28 @@ const QuizStart = () => {
   const currentQuestion = questions[currentQuestionIndex];
 
   return (
-    <div>
+    <BackgroundWrapper>
       <NavigationBar />
-      <div className="p-4">
-        <h2 className="text-xl font-bold">{quizTitle}</h2>
+      <div className="p-4 max-w-4xl mx-auto text-white">
+        <h2 className="text-3xl font-poppins font-bold text-shadow-lg mb-4">{quizTitle}</h2>
         {currentQuestion && (
-          <div className="mt-4">
-            <div className="py-2 border-b border-gray-200">
-              <p>{currentQuestion.questionText}</p>
+          <div className="mt-4 p-4 bg-black bg-opacity-80 shadow rounded-lg">
+            <div className="py-2">
+              <p className="text-xl font-poppins font-semibold">{currentQuestion.questionText}</p>
               <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {answers[currentQuestion.questionID] && answers[currentQuestion.questionID].map((answer, answerIndex) => (
                   <div
                     key={answerIndex}
-                    className={`p-4 shadow rounded-lg cursor-pointer ${
+                    className={`p-4 shadow rounded-lg cursor-pointer font-poppins font-bold text-lg text-shadow-lg ${
                       selectedAnswer && selectedAnswer.questionID === currentQuestion.questionID && selectedAnswer.answerID === answer.answerID
                         ? selectedAnswer.isCorrect
-                          ? 'bg-green-500 text-white'
-                          : 'bg-red-500 text-white'
-                        : 'bg-white'
+                          ? 'bg-green-500 bg-opacity-80 text-white'
+                          : 'bg-red-500 bg-opacity-80 text-white'
+                        : 'bg-white text-black font-poppins'
                     }`}
                     onClick={() => handleAnswerClick(currentQuestion.questionID, answer.answerID, answer.answerText, answer.isCorrect)}
                   >
-                    <h3 className="text-lg font-bold">{answer.answerText}</h3>
+                    <h3>{answer.answerText}</h3>
                   </div>
                 ))}
               </div>
@@ -93,11 +93,11 @@ const QuizStart = () => {
           </div>
         )}
         {!currentQuestion && (
-          <div className="mt-4">
-            <p className="text-xl font-bold">Quiz Completed!</p>
-            <p className="text-md">Final Score: {score}</p>
+          <div className="mt-4 p-4 bg-black bg-opacity-80 shadow rounded-lg">
+            <p className="text-2xl font-poppins font-bold text-shadow-lg">Quiz Completed!</p>
+            <p className="text-xl font-poppins">Final Score: {score}</p>
             <button 
-              className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
+              className="mt-4 px-4 py-2 bg-purple-500 bg-opacity-80 text-white font-poppins font-bold text-shadow-lg rounded"
               onClick={handleBackToCategories}
             >
               Back to Categories
@@ -105,7 +105,7 @@ const QuizStart = () => {
           </div>
         )}
       </div>
-    </div>
+    </BackgroundWrapper>
   );
 };
 

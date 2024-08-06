@@ -5,11 +5,7 @@ import store from './store';
 import LoginPage from './components/LoginPage';
 import SignUpPage from './components/SignUpPage';
 import Home from './components/Home';
-import Profile from './components/Profile';
 import Categories from './components/Categories';
-import HowToPlay from './components/HowToPlay';
-import About from './components/About';
-import Contact from './components/Contact';
 import QuizDetails from './components/QuizDetails';
 import QuizStart from './components/QuizStart';
 import SeeMyQuizzes from './components/SeeMyQuizzes';
@@ -25,11 +21,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/home" element={<Home />} />
-          <Route path="/profile" element={<Profile />} />
           <Route path="/categories" element={<Categories />} />
-          <Route path="/how-to-play" element={<HowToPlay />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
           <Route path="/quiz/:quizId" element={<QuizDetails />} />
           <Route path="/quiz-start/:quizId" element={<QuizStart />} />
           <Route path="/see-my-quizzes" element={<SeeMyQuizzes />} />
