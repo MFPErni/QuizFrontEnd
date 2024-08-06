@@ -1,4 +1,4 @@
-// src/hooks/useAuthRedirect.js
+// src/useAuthRedirect.js
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';

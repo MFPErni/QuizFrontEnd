@@ -9,7 +9,7 @@ import BackgroundWrapper from './BackgroundWrapper';
 const EditQuiz = () => {
   useAuthRedirect();
 
-  const { quizId } = useParams(); // Correctly retrieve the quizId parameter
+  const { quizId } = useParams();
   const username = useSelector((state) => state.user.username);
   const navigate = useNavigate();
   const [adminID, setAdminID] = useState(null);
@@ -24,6 +24,7 @@ const EditQuiz = () => {
   const [removedAnswers, setRemovedAnswers] = useState([]);
   const [errors, setErrors] = useState({});
 
+  // fetch categories
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -38,6 +39,7 @@ const EditQuiz = () => {
     fetchCategories();
   }, []);
 
+  // fetch adminID
   useEffect(() => {
     const fetchAdminID = async () => {
       try {
@@ -51,12 +53,13 @@ const EditQuiz = () => {
     fetchAdminID();
   }, [username]);
 
+  // fetch quizdata (title, description, categoryID)
   useEffect(() => {
     const fetchQuizData = async () => {
       try {
         const response = await axios.get(`/quiz/${quizId}`);
         const quizData = response.data;
-        console.log('Fetched Quiz Data:', quizData); // Log the quiz data
+        console.log('Fetched Quiz Data:', quizData);
 
         setFormData({
           title: quizData.title,
@@ -64,7 +67,6 @@ const EditQuiz = () => {
           categoryID: quizData.categoryID
         });
 
-        // Extract the questions array from the $values property
         const questionsArray = Array.isArray(quizData.questions.$values) ? quizData.questions.$values : [];
 
         setQuestions(questionsArray.map(question => ({
@@ -84,12 +86,14 @@ const EditQuiz = () => {
     fetchQuizData();
   }, [quizId]);
 
+  // change of title, desc or category
   const handleChange = (e) => {
     const { id, value } = e.target;
     setFormData({ ...formData, [id]: value });
     setErrors({ ...errors, [id]: '' });
   };
 
+  // change of question
   const handleQuestionChange = (index, value) => {
     const newQuestions = [...questions];
     newQuestions[index].questionText = value;
@@ -97,6 +101,7 @@ const EditQuiz = () => {
     setErrors({ ...errors, [`question-${index}`]: '' });
   };
 
+  // change of answer
   const handleAnswerChange = (questionIndex, answerIndex, value) => {
     const newQuestions = [...questions];
     newQuestions[questionIndex].answers[answerIndex].answerText = value;
@@ -167,7 +172,6 @@ const EditQuiz = () => {
     if (!validateForm()) return;
 
     try {
-      // Delete removed questions and answers
       for (const questionID of removedQuestions) {
         await axios.delete(`/question/${questionID}`);
       }

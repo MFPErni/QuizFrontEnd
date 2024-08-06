@@ -22,22 +22,19 @@ const Categories = () => {
       const categoryData = response.data;
       console.log('Fetched Unique Category Titles:', categoryData); // Debug statement
 
-      // Extract the $values property if it exists
       const categoryTitles = categoryData.$values || [];
       if (Array.isArray(categoryTitles)) {
         setCategories(categoryTitles);
 
-        // Fetch quizzes for each category
         categoryTitles.forEach(async (categoryTitle) => {
           const categoryIdResponse = await axios.get(`/category/category-id?title=${categoryTitle}`);
           const categoryId = categoryIdResponse.data;
-          console.log(`Category ID for "${categoryTitle}":`, categoryId); // Log the CategoryID
+          console.log(`Category ID for "${categoryTitle}":`, categoryId);
 
           const quizzesResponse = await axios.get(`/quiz/quizzes-by-category/${categoryId}`);
           const quizzesData = quizzesResponse.data.$values || [];
-          console.log(`Fetched Quizzes for Category ID ${categoryId}:`, quizzesData); // Log the quizzes
+          console.log(`Fetched Quizzes for Category ID ${categoryId}:`, quizzesData);
 
-          // Update the state with the fetched quizzes
           setQuizzesByCategory(prevState => ({
             ...prevState,
             [categoryTitle]: quizzesData

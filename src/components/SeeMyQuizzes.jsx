@@ -19,7 +19,7 @@ const SeeMyQuizzes = () => {
     const fetchQuizzes = async () => {
       try {
         const response = await axios.get(`/quiz/quizzes-by-admin?username=${username}`);
-        const quizzesData = response.data.$values; // Access the $values property
+        const quizzesData = response.data.$values;
 
         if (Array.isArray(quizzesData)) {
           setQuizzes(quizzesData);
@@ -37,13 +37,13 @@ const SeeMyQuizzes = () => {
   const handleDeleteClick = async (quizID) => {
     try {
       const questionResponse = await axios.get(`/question/questions-by-quiz/${quizID}`);
-      const questionsData = questionResponse.data.$values; // Access the $values property
+      const questionsData = questionResponse.data.$values;
 
       if (Array.isArray(questionsData)) {
         for (const question of questionsData) {
           try {
             const answerResponse = await axios.get(`/answer/answers-by-question/${question.questionID}`);
-            const answersData = answerResponse.data.$values; // Access the $values property
+            const answersData = answerResponse.data.$values;
 
             if (Array.isArray(answersData)) {
               for (const answer of answersData) {
@@ -80,10 +80,9 @@ const SeeMyQuizzes = () => {
       console.error('Error deleting quiz or its related data:', error);
     }
 
-    // Refresh the quizzes list after deletion
     try {
       const response = await axios.get(`/quiz/quizzes-by-admin?username=${username}`);
-      const quizzesData = response.data.$values; // Access the $values property
+      const quizzesData = response.data.$values;
 
       if (Array.isArray(quizzesData)) {
         setQuizzes(quizzesData);

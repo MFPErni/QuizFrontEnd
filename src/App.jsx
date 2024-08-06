@@ -10,8 +10,7 @@ import QuizDetails from './components/QuizDetails';
 import QuizStart from './components/QuizStart';
 import SeeMyQuizzes from './components/SeeMyQuizzes';
 import CreateQuiz from './components/CreateQuiz';
-import EditQuiz from './components/EditQuiz'; // Import the EditQuiz component
-
+import EditQuiz from './components/EditQuiz';
 function App() {
   return (
     <Provider store={store}>

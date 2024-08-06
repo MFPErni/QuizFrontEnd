@@ -21,6 +21,7 @@ const CreateQuiz = () => {
   const [questions, setQuestions] = useState([{ questionText: '', answers: [{ answerText: '', isCorrect: true }, { answerText: '', isCorrect: false }] }]);
   const [errors, setErrors] = useState({});
 
+  // fetch categories
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -35,6 +36,8 @@ const CreateQuiz = () => {
     fetchCategories();
   }, []);
 
+
+  // fetch adminid
   useEffect(() => {
     const fetchAdminID = async () => {
       try {
@@ -81,6 +84,7 @@ const CreateQuiz = () => {
     setQuestions([...questions, { questionText: '', answers: [{ answerText: '', isCorrect: true }, { answerText: '', isCorrect: false }] }]);
   };
 
+  // atleast 1 question
   const handleRemoveQuestion = () => {
     if (questions.length > 1) {
       const newQuestions = [...questions];
@@ -95,6 +99,7 @@ const CreateQuiz = () => {
     setQuestions(newQuestions);
   };
 
+  // atleast 1 answer
   const handleRemoveAnswer = (questionIndex) => {
     const newQuestions = [...questions];
     if (newQuestions[questionIndex].answers.length > 2) {
@@ -103,6 +108,7 @@ const CreateQuiz = () => {
     }
   };
 
+  // validation
   const validateForm = () => {
     const newErrors = {};
     if (!formData.title) newErrors.title = 'This field is required';

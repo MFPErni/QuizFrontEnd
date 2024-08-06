@@ -12,7 +12,6 @@ const NavigationBar = () => {
   };
 
   const handleLogout = () => {
-    // Perform any necessary cleanup, such as clearing user data or tokens
     navigate('/login');
   };
 
@@ -26,7 +25,7 @@ const NavigationBar = () => {
           maxWidth = linkWidth;
         }
       });
-      setMenuWidth(`${maxWidth + 32}px`); // Add some padding
+      setMenuWidth(`${maxWidth + 32}px`);
     }
   }, [isOpen]);
 
