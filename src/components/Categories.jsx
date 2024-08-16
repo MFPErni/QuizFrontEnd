@@ -20,7 +20,7 @@ const Categories = () => {
     try {
       const response = await axios.get('/quiz/categories');
       const categoryData = response.data;
-      console.log('Fetched Unique Category Titles:', categoryData); // Debug statement
+      console.log('Fetched Unique Category Titles:', categoryData);
 
       const categoryTitles = categoryData.$values || [];
       if (Array.isArray(categoryTitles)) {
@@ -70,7 +70,7 @@ const Categories = () => {
       <NavigationBar />
       <div className="p-4 text-white">
         <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-poppins font-bold text-shadow-lg">Categories</h1>
+          <h1 className="p-4 bg-teal-400 bg-opacity-90 shadow rounded-lg text-2xl font-poppins font-bold text-shadow-lg">Categories</h1>
           <button 
             className="px-4 py-2 bg-purple-600 bg-opacity-80 text-white font-poppins font-bold text-shadow-lg rounded"
             onClick={handleSeeMyQuizzesClick}
@@ -78,29 +78,34 @@ const Categories = () => {
             See My Quizzes
           </button>
         </div>
-        <ul className="mt-4">
+        <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
           {categories.map((category, index) => (
-            <li key={index} className="py-2">
-              <div className="flex justify-between items-center">
-                <span className="text-xl font-poppins font-semibold text-shadow-lg">{category}</span>
+            <div key={index} className="p-4 bg-black bg-opacity-95 shadow rounded-lg">
+              <div className="flex justify-between items-center mb-4">
+                <div className="text-wrapper">
+                  <span className="text-xl font-poppins font-semibold text-shadow-lg">{category}</span>
+                </div>
               </div>
               {quizzesByCategory[category] && (
-                <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 gap-4">
                   {quizzesByCategory[category].map((quiz, quizIndex) => (
                     <div
                       key={quizIndex}
-                      className="p-4 bg-black bg-opacity-80 shadow rounded-lg cursor-pointer"
+                      className="p-4 bg-teal-400 bg-opacity-90 shadow rounded-lg cursor-pointer flex flex-col justify-center items-center"
+                      style={{ height: '15vh', width: '100%' }}
                       onClick={() => handleCardClick(quiz.quizID, quiz.title, quiz.description, quiz.categoryTitle)}
                     >
-                      <h3 className="text-lg font-poppins font-bold text-white">{quiz.title}</h3>
-                      <p className="text-sm text-gray-300">Quiz ID: {quiz.quizID}</p>
+                      <h3 className="text-lg font-poppins font-bold text-white text-center truncate" style={{ maxWidth: '100%' }}>
+                        {quiz.title}
+                      </h3>
+                      <p className="text-sm text-gray-300 text-center">Quiz ID: {quiz.quizID}</p>
                     </div>
                   ))}
                 </div>
               )}
-            </li>
+            </div>
           ))}
-        </ul>
+        </div>
       </div>
     </BackgroundWrapper>
   );

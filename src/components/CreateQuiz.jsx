@@ -36,7 +36,6 @@ const CreateQuiz = () => {
     fetchCategories();
   }, []);
 
-
   // fetch adminid
   useEffect(() => {
     const fetchAdminID = async () => {
@@ -100,11 +99,18 @@ const CreateQuiz = () => {
   };
 
   // atleast 1 answer
-  const handleRemoveAnswer = (questionIndex) => {
+  const handleRemoveAnswer = (questionIndex, answerIndex) => {
     const newQuestions = [...questions];
     if (newQuestions[questionIndex].answers.length > 2) {
-      newQuestions[questionIndex].answers.pop();
-      setQuestions(newQuestions);
+      if (newQuestions[questionIndex].answers[answerIndex].isCorrect) {
+        setErrors({ ...errors, [`answer-${questionIndex}-${answerIndex}`]: "Can't remove the correct answer" });
+      } else {
+        newQuestions[questionIndex].answers.splice(answerIndex, 1);
+        setQuestions(newQuestions);
+        const newErrors = { ...errors };
+        delete newErrors[`answer-${questionIndex}-${answerIndex}`];
+        setErrors(newErrors);
+      }
     }
   };
 
@@ -235,40 +241,44 @@ const CreateQuiz = () => {
                 />
                 {errors[`question-${questionIndex}`] && <p className="text-red-500 text-xs italic">{errors[`question-${questionIndex}`]}</p>}
                 {question.answers.map((answer, answerIndex) => (
-                  <div key={answerIndex} className="flex items-center mt-4">
-                    <input
-                      type="text"
-                      value={answer.answerText}
-                      onChange={(e) => handleAnswerChange(questionIndex, answerIndex, e.target.value)}
-                      className="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mr-2"
-                      required
-                    />
-                    <button
-                      type="button"
-                      className={`shadow appearance-none border rounded py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${answer.isCorrect ? 'bg-green-500 text-white font-poppins font-bold text-shadow-lg' : 'bg-red-500 text-white font-poppins font-bold text-shadow-lg'}`}
-                      onClick={() => handleToggleCorrect(questionIndex, answerIndex)}
-                    >
-                      {answer.isCorrect ? 'True' : 'False'}
-                    </button>
-                    {errors[`answer-${questionIndex}-${answerIndex}`] && <p className="text-red-500 text-xs italic ml-2">{errors[`answer-${questionIndex}-${answerIndex}`]}</p>}
+                  <div key={answerIndex} className="mt-4">
+                    <div className="flex items-center">
+                      <input
+                        type="text"
+                        value={answer.answerText}
+                        onChange={(e) => handleAnswerChange(questionIndex, answerIndex, e.target.value)}
+                        className="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mr-2"
+                        required
+                      />
+                      <button
+                        type="button"
+                        className={`shadow appearance-none border rounded py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${answer.isCorrect ? 'bg-green-500 text-white font-poppins font-bold text-shadow-lg' : 'bg-red-500 text-white font-poppins font-bold text-shadow-lg'}`}
+                        onClick={() => handleToggleCorrect(questionIndex, answerIndex)}
+                      >
+                        {answer.isCorrect ? 'True' : 'False'}
+                      </button>
+                    </div>
+                    {errors[`answer-${questionIndex}-${answerIndex}`] && (
+                      <p className="text-red-500 text-xs italic mt-2">{errors[`answer-${questionIndex}-${answerIndex}`]}</p>
+                    )}
                   </div>
                 ))}
                 {errors[`question-${questionIndex}-true`] && <p className="text-red-500 text-xs italic">{errors[`question-${questionIndex}-true`]}</p>}
                 <div className="flex space-x-4 mt-4">
                   <button
                     type="button"
-                    className="px-4 py-2 bg-blue-500 bg-opacity-80 text-white font-poppins font-bold text-shadow-lg rounded"
+                    className="px-4 py-2 bg-sky-600 bg-opacity-80 text-white font-poppins font-bold text-shadow-lg rounded"
                     onClick={() => handleAddAnswer(questionIndex)}
                   >
-                    Add Answer
+                    +
                   </button>
                   {question.answers.length > 2 && (
                     <button
                       type="button"
                       className="px-4 py-2 bg-red-500 text-white font-poppins font-bold text-shadow-lg rounded"
-                      onClick={() => handleRemoveAnswer(questionIndex)}
+                      onClick={() => handleRemoveAnswer(questionIndex, question.answers.length - 1)}
                     >
-                      Remove Answer
+                      -
                     </button>
                   )}
                 </div>
@@ -277,7 +287,7 @@ const CreateQuiz = () => {
             <div className="flex space-x-4 mt-4">
               <button
                 type="button"
-                className="px-4 py-2 bg-blue-500 bg-opacity-80 text-white font-poppins font-bold text-shadow-lg rounded"
+                className="px-4 py-2 bg-emerald-500 bg-opacity-80 text-white font-poppins font-bold text-shadow-lg rounded"
                 onClick={handleAddQuestion}
               >
                 Add Question
@@ -285,7 +295,7 @@ const CreateQuiz = () => {
               {questions.length > 1 && (
                 <button
                   type="button"
-                  className="px-4 py-2 bg-red-500 text-white font-poppins font-bold text-shadow-lg rounded"
+                  className="px-4 py-2 bg-orange-500 text-white font-poppins font-bold text-shadow-lg rounded"
                   onClick={handleRemoveQuestion}
                 >
                   Remove Question

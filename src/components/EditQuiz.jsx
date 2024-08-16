@@ -270,7 +270,7 @@ const EditQuiz = () => {
             {errors.categoryID && <p className="text-red-500 text-xs italic">{errors.categoryID}</p>}
           </div>
           <div className="mb-6 p-4 bg-black bg-opacity-80 shadow rounded-lg">
-            <h2 className="text-2xl font-poppins font-bold mb-4">Add Questions</h2>
+            <h2 className="text-2xl font-poppins font-bold mb-4">Add Another Questions</h2>
             {questions.map((question, questionIndex) => (
               <div key={questionIndex} className="mb-6">
                 <label className="block text-sm font-poppins font-bold mb-2" htmlFor={`question-${questionIndex}`}>
@@ -304,10 +304,10 @@ const EditQuiz = () => {
                     {errors[`answer-${questionIndex}-${answerIndex}`] && <p className="text-red-500 text-xs italic ml-2">{errors[`answer-${questionIndex}-${answerIndex}`]}</p>}
                     <button
                       type="button"
-                      className="ml-2 px-4 py-2 bg-red-500 bg-opacity-80 text-white font-poppins font-bold text-shadow-lg rounded"
+                      className="ml-2 px-4 py-2 text-white font-poppins font-bold text-shadow-lg rounded"
                       onClick={() => handleRemoveAnswer(questionIndex, answerIndex)}
                     >
-                      Remove Answer
+                      X
                     </button>
                   </div>
                 ))}
@@ -315,12 +315,12 @@ const EditQuiz = () => {
                 <div className="flex space-x-4 mt-4">
                   <button
                     type="button"
-                    className="px-4 py-2 bg-blue-500 bg-opacity-80 text-white font-poppins font-bold text-shadow-lg rounded"
+                    className="px-4 py-2 bg-sky-600 bg-opacity-80 text-white font-poppins font-bold text-shadow-lg rounded"
                     onClick={() => handleAddAnswer(questionIndex)}
                   >
-                    Add Answer
+                    Add Choice
                   </button>
-                  {question.answers.length > 2 && (
+                  {questions.length > 1 && (
                     <button
                       type="button"
                       className="px-4 py-2 bg-red-500 bg-opacity-80 text-white font-poppins font-bold text-shadow-lg rounded"
@@ -335,20 +335,11 @@ const EditQuiz = () => {
             <div className="flex space-x-4 mt-4">
               <button
                 type="button"
-                className="px-4 py-2 bg-blue-500 bg-opacity-80 text-white font-poppins font-bold text-shadow-lg rounded"
+                className="px-4 py-2 bg-emerald-500 bg-opacity-80 text-white font-poppins font-bold text-shadow-lg rounded"
                 onClick={handleAddQuestion}
               >
                 Add Question
               </button>
-              {questions.length > 1 && (
-                <button
-                  type="button"
-                  className="px-4 py-2 bg-red-500 bg-opacity-80 text-white font-poppins font-bold text-shadow-lg rounded"
-                  onClick={() => handleRemoveQuestion(questions.length - 1)}
-                >
-                  Remove Question
-                </button>
-              )}
             </div>
           </div>
           <div className="flex items-center justify-center mt-8">

@@ -47,24 +47,26 @@ const QuizDetails = () => {
   return (
     <BackgroundWrapper>
       <NavigationBar />
-      <div className="p-4 text-white">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-poppins font-bold text-shadow-lg">{quizTitle}</h2>
+      <div className="flex justify-center p-4 text-white">
+        <div className="w-full max-w-md p-4 bg-black bg-opacity-95 shadow rounded-lg cursor-pointer">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-poppins font-bold text-shadow-lg">{quizTitle}</h2>
+            <button 
+              className="px-4 py-2 bg-pink-600 bg-opacity-80 text-white font-poppins font-bold text-shadow-lg rounded"
+              onClick={handleBackClick}
+            >
+              Back
+            </button>
+          </div>
+          <p className="text-md font-poppins">{quizDescription}</p>
           <button 
-            className="px-4 py-2 bg-pink-600 bg-opacity-80 text-white font-poppins font-bold text-shadow-lg rounded"
-            onClick={handleBackClick}
+            className="mt-4 px-4 py-2 bg-purple-600 bg-opacity-80 text-white font-poppins font-bold text-shadow-lg rounded"
+            onClick={handleStartClick}
           >
-            Back
+            Start
           </button>
+          {message && <p className="mt-2 text-red-500">{message}</p>}
         </div>
-        <p className="text-md font-poppins">{quizDescription}</p>
-        <button 
-          className="mt-4 px-4 py-2 bg-purple-600 bg-opacity-80 text-white font-poppins font-bold text-shadow-lg rounded"
-          onClick={handleStartClick}
-        >
-          Start
-        </button>
-        {message && <p className="mt-2 text-red-500">{message}</p>}
       </div>
     </BackgroundWrapper>
   );

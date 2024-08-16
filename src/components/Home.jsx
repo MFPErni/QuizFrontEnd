@@ -19,7 +19,7 @@ const Home = () => {
       <NavigationBar />
       <div className="absolute inset-0 flex items-center justify-center text-center text-white">
         <div className="p-4">
-          <h1 className="text-2xl font-bold text-shadow-lg">Welcome to MPediments</h1>
+          <h1 className="text-2xl font-bold text-shadow-lg">Welcome to MPdiments</h1>
           <p className="mt-2 text-shadow-lg">Transforming Impediments into Opportunities!</p>
         </div>
       </div>
