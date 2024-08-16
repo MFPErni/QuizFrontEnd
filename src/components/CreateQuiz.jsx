@@ -18,8 +18,13 @@ const CreateQuiz = () => {
     categoryID: ''
   });
   const [categories, setCategories] = useState([]);
-  const [questions, setQuestions] = useState([{ questionText: '', answers: [{ answerText: '', isCorrect: true }, { answerText: '', isCorrect: false }] }]);
+  const [questions, setQuestions] = useState([]);
   const [errors, setErrors] = useState({});
+  const [initialSetup, setInitialSetup] = useState({
+    numQuestions: 1,
+    numAnswers: 2,
+    isSetupComplete: false
+  });
 
   // fetch categories
   useEffect(() => {
@@ -80,7 +85,7 @@ const CreateQuiz = () => {
   };
 
   const handleAddQuestion = () => {
-    setQuestions([...questions, { questionText: '', answers: [{ answerText: '', isCorrect: true }, { answerText: '', isCorrect: false }] }]);
+    setQuestions([...questions, { questionText: '', answers: Array(initialSetup.numAnswers).fill({ answerText: '', isCorrect: false }) }]);
   };
 
   // atleast 1 question
@@ -163,68 +168,127 @@ const CreateQuiz = () => {
     navigate('/see-my-quizzes');
   };
 
+  const handleInitialSetupSubmit = (e) => {
+    e.preventDefault();
+    const initialQuestions = Array.from({ length: initialSetup.numQuestions }, () => ({
+      questionText: '',
+      answers: Array.from({ length: initialSetup.numAnswers }, (v, i) => ({ answerText: '', isCorrect: i === 0 }))
+    }));
+    setQuestions(initialQuestions);
+    setInitialSetup({ ...initialSetup, isSetupComplete: true });
+  };
+
+  if (!initialSetup.isSetupComplete) {
+    return (
+      <BackgroundWrapper>
+        <NavigationBar />
+        <div className="p-4 max-w-4xl mx-auto text-white">
+          <h1 className="text-3xl font-poppins font-bold text-shadow-lg mb-6">Setup Your Quiz</h1>
+          <form onSubmit={handleInitialSetupSubmit}>
+            <div className="mb-4">
+              <label className="block text-sm font-poppins font-bold mb-2" htmlFor="numQuestions">
+                Number of Questions
+              </label>
+              <input
+                type="number"
+                id="numQuestions"
+                value={initialSetup.numQuestions}
+                onChange={(e) => setInitialSetup({ ...initialSetup, numQuestions: Number(e.target.value) })}
+                className="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                min="1"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-sm font-poppins font-bold mb-2" htmlFor="numAnswers">
+                Number of Answers per Question
+              </label>
+              <input
+                type="number"
+                id="numAnswers"
+                value={initialSetup.numAnswers}
+                onChange={(e) => setInitialSetup({ ...initialSetup, numAnswers: Number(e.target.value) })}
+                className="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                min="2"
+              />
+            </div>
+            <button
+              type="submit"
+              className="px-4 py-2 bg-blue-500 text-white font-poppins font-bold text-shadow-lg rounded"
+            >
+              Start Creating
+            </button>
+          </form>
+        </div>
+      </BackgroundWrapper>
+    );
+  }
+
   return (
     <BackgroundWrapper>
       <NavigationBar />
       <div className="p-4 max-w-4xl mx-auto text-white">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-poppins font-bold text-shadow-lg">Create a New Quiz</h1>
-          <button 
-            className="px-4 py-2 bg-pink-600 bg-opacity-80 text-white font-poppins font-bold text-shadow-lg rounded"
-            onClick={handleBackClick}
-          >
-            Back
-          </button>
+        <div className="bg-red-800 bg-opacity-95 shadow-lg rounded-lg p-6 mb-6">
+          <div className="flex justify-between items-center mb-6">
+            <h1 className="text-3xl font-poppins font-bold text-shadow-lg">Create a New Quiz</h1>
+            <button 
+              className="px-4 py-2 bg-black bg-opacity-80 text-white font-poppins font-bold text-shadow-lg rounded"
+              onClick={handleBackClick}
+            >
+              Back
+            </button>
+          </div>
+          <form>
+            <div className="mb-6">
+              <label className="block text-sm font-poppins font-bold mb-2" htmlFor="title">
+                Title
+              </label>
+              <input
+                type="text"
+                id="title"
+                value={formData.title}
+                onChange={handleChange}
+                className="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                required
+              />
+              {errors.title && <p className="text-red-500 text-xs italic">{errors.title}</p>}
+            </div>
+            <div className="mb-6">
+              <label className="block text-sm font-poppins font-bold mb-2" htmlFor="description">
+                Description
+              </label>
+              <textarea
+                id="description"
+                value={formData.description}
+                onChange={handleChange}
+                className="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                required
+              />
+              {errors.description && <p className="text-red-500 text-xs italic">{errors.description}</p>}
+            </div>
+            <div className="mb-6">
+              <label className="block text-sm font-poppins font-bold mb-2" htmlFor="categoryID">
+                Category
+              </label>
+              <select
+                id="categoryID"
+                value={formData.categoryID}
+                onChange={handleChange}
+                className="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                required
+              >
+                <option value="">Select a category</option>
+                {categories.map((category, index) => (
+                  <option key={index} value={index + 1}>
+                    {category}
+                  </option>
+                ))}
+              </select>
+              {errors.categoryID && <p className="text-red-500 text-xs italic">{errors.categoryID}</p>}
+            </div>
+          </form>
         </div>
         <form>
-          <div className="mb-6">
-            <label className="block text-sm font-poppins font-bold mb-2" htmlFor="title">
-              Title
-            </label>
-            <input
-              type="text"
-              id="title"
-              value={formData.title}
-              onChange={handleChange}
-              className="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              required
-            />
-            {errors.title && <p className="text-red-500 text-xs italic">{errors.title}</p>}
-          </div>
-          <div className="mb-6">
-            <label className="block text-sm font-poppins font-bold mb-2" htmlFor="description">
-              Description
-            </label>
-            <textarea
-              id="description"
-              value={formData.description}
-              onChange={handleChange}
-              className="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              required
-            />
-            {errors.description && <p className="text-red-500 text-xs italic">{errors.description}</p>}
-          </div>
-          <div className="mb-6">
-            <label className="block text-sm font-poppins font-bold mb-2" htmlFor="categoryID">
-              Category
-            </label>
-            <select
-              id="categoryID"
-              value={formData.categoryID}
-              onChange={handleChange}
-              className="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              required
-            >
-              <option value="">Select a category</option>
-              {categories.map((category, index) => (
-                <option key={index} value={index + 1}>
-                  {category}
-                </option>
-              ))}
-            </select>
-            {errors.categoryID && <p className="text-red-500 text-xs italic">{errors.categoryID}</p>}
-          </div>
-          <div className="mb-6 p-4 bg-black bg-opacity-80 shadow rounded-lg">
+          <div className="mb-6 p-4 bg-black bg-opacity-95 shadow rounded-lg">
             <h2 className="text-2xl font-poppins font-bold mb-4">Add Questions</h2>
             {questions.map((question, questionIndex) => (
               <div key={questionIndex} className="mb-6">
